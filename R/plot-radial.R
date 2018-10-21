@@ -1,8 +1,8 @@
 #' Thin wrapper of plotrix::radial.plot
 #'
-#' @rdname plot-radial
 #' @importFrom plotrix radial.plot
 #' @importFrom RColorBrewer brewer.pal
+#' @rdname plot-radial
 #' @export
 plotRadial <- function(index,base=1,col.tmp=NULL,lwd=2,...){
     old.par <- par()

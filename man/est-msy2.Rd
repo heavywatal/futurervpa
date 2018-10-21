@@ -11,6 +11,18 @@ est.MSY2(vpares, N = 1000, res1 = NULL, sim0 = NULL, nyear = NULL,
   AutoCorOut = FALSE, current.resid = 0,
   future.function.name = "future.vpa1", seed = 1)
 }
+\arguments{
+\item{N}{stochastic計算するときの繰り返し回数}
+
+\item{Fmsy.max}{current FがFmsyに比べて小さすぎる場合、うまく収束しない場合があります。
+そのときはこのオプションでFmsy.max=10とかしてください。}
+
+\item{AutoCor}{関数内部で自己相関係数を推定するか "future.vpa"を使う場合はどちらでも良い}
+
+\item{AutoCorOut}{フィットさせたあと残差の自己相関を計算する場合}
+
+\item{current.resid}{最近年何年分の自己相関を平均するか}
+}
 \description{
 Estimate MSY
 }

@@ -1,12 +1,16 @@
 #' 結果の出力
 #'
+#' @param res VPA result
+#' @param rres reference point
+#' @param fres future projection result (not nessesarily)
+#' @param filename filename without extension
 #' @rdname out-vpa
 #' @export
-out.vpa <- function(res=NULL, # VPA result
-                    rres=NULL, # reference point
-                    fres=NULL, # future projection result (not nessesarily)
+out.vpa <- function(res=NULL,
+                    rres=NULL,
+                    fres=NULL,
                     ABC=NULL,
-                    filename="vpa" # filename without extension
+                    filename="vpa"
                     ){
   old.par <- par()
   exit.func <- function(){

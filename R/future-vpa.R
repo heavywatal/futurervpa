@@ -2,60 +2,80 @@
 #'
 #' @description
 #' multiのオプションは管理後のFのmultiplier（管理前後でselectivityが同じ）
+#' 年数がNULLの場合，VPAの最終年のパラメータを持ってくる。
+#' @param currentF 管理前のF
+#' @param multi 管理後（ABC.yearから）のF (current F x multi)
+#' @param multi.year ある特定の年だけFを変えたい場合。デフォルトは1。変える場合は、指定した年またはタイムステップの要素数のベクトルで指定。
+#' @param start.year 将来予測の開始年，NULLの場合はVPA計算の最終年の次の年
+#' @param ABC.year ABC yearを計算する年。NULLの場合はVPA計算の最終年の次の次の年
+#' @param waa.year VPA結果から生物パラメータをもってきて平均する期間
+#' @param maa.year VPA結果から生物パラメータをもってきて平均する期間
+#' @param M.year VPA結果から生物パラメータをもってきて平均する期間
+#' @param strategy F: 漁獲係数一定, E: 漁獲割合一定、C: 漁獲量一定（pre.catchで漁獲量を指定）
+#' @param HCR HCRを使う場合、list(Blim=154500, Bban=49400,beta=1)のように指定するか、以下の引数をセットする,
+#' @param N 確率的なシミュレーションをする場合の繰り返し回数。
+#'        N+1の結果が返され、1列目に決定論的な結果が
+#'        0を与えると決定論的な結果のみを出力
+#' @param silent,is.plot 計算条件を出力、プロットするか
+#' @param random.select 選択率をランダムリサンプリングする場合、ランダムリサンプリングする年を入れる
+#'        strategy="C"または"E"のときのみ有効
+#' @param pre.catch list(year=2012,wcatch=13000), 漁獲重量をgivenで与える場合
+#'        list(year=2012:2017,E=rep(0.5,6)), 漁獲割合をgivenで与える場合
+#' @param rec.new 指定した年の加入量
+#'        年を指定しないで与える場合は、自動的にスタート年の加入になる。
+#'        list(year=, rec=)で与える場合は、対応する年の加入を置き換える。
+#' @param recfunc 再生産関係の関数
+#' @param rec.arg 加入関数の各種設定
+#' @param Frec Frec計算のための設定リストを与えると、指定された設定でのFrecに対応するFで将来予測を行う
+#'        list(stochastic=TRUE, # TRUEの場合、stochastic simulationで50%の確率でBlimitを越す(PMS, TMI)
+#'        FALSEの場合、RPS固定のprojectionがBilmitと一致する(NSK)
+#'        future.year=2018, # 何年の資源量を見るか？
+#'        Blimit=450*1000,  # Blimit (xトン)
+#'        scenario="catch.mean" or "blimit" (デフォルトはblimit; "catch.mean"とするとstochastic simulationにおける平均漁獲量がBlimitで指定した値と一致するようになる)
+#'        Frange=c(0.01,2*mult)) # Fの探索範囲
+#' @param waa,waa.catch,maa,M 季節毎の生物パラメータ、または、生物パラメータを外から与える場合
+#' @param waa.multi waa.optyearに対応する年について、暦年漁獲量と一致するようにwaaを最適化するか？ "opt"の場合、内部で最適化。waa.optyearの長さ分のベクトルを与えて指定することもできる（ts>1のときのオプション）
+#' @param waa.optyear waa.optyearをするときに、置き換えるwaaの年
+#' @param replace.rec.year 加入量を暦年の将来予測での加入量に置き換えるか？
+#' @param waa.fun waaをnaaのfunctionとするか
+#' @param add.year 岡村オプションに対応。=1で1年分余計に計算する
+#' @param det.run 1回めのランは決定論的将来予測をする（完璧には対応していない）
 #' @rdname future-vpa
 #' @export
-future.vpa <-
-  function(res0,
-           currentF=NULL, # 管理前のF
-           multi=1, # 管理後（ABC.yearから）のF (current F x multi)
-           nyear=10,Pope=res0$input$Pope,
-           outtype="FULL",
-           multi.year=1,#ある特定の年だけFを変えたい場合。デフォルトは1。変える場合は、指定した年またはタイムステップの要素数のベクトルで指定。
-           # 年数の指定
-           start.year=NULL, # 将来予測の開始年，NULLの場合はVPA計算の最終年の次の年
-           ABC.year=NULL, # ABC yearを計算する年。NULLの場合はVPA計算の最終年の次の次の年
-           waa.year=NULL, # VPA結果から生物パラメータをもってきて平均する期間
-           # NULLの場合，VPAの最終年のパラメータを持ってくる
-           maa.year=NULL, # VPA結果から生物パラメータをもってきて平均する期間
-           M.year=NULL, # VPA結果から生物パラメータをもってきて平均する期間
-           seed=NULL,
-           strategy="F", # F: 漁獲係数一定, E: 漁獲割合一定、C: 漁獲量一定（pre.catchで漁獲量を指定）
-           HCR=NULL,# HCRを使う場合、list(Blim=154500, Bban=49400,beta=1)のように指定するか、以下の引数をセットする,
-           beta=NULL,delta=NULL,Blim=0,Bban=0,
-           plus.group=res0$input$plus.group,
-           N=1000,# 確率的なシミュレーションをする場合の繰り返し回数。
-           # N+1の結果が返され、1列目に決定論的な結果が
-           # 0を与えると決定論的な結果のみを出力
-           silent=FALSE, is.plot=TRUE, # 計算条件を出力、プロットするか
-           random.select=NULL, # 選択率をランダムリサンプリングする場合、ランダムリサンプリングする年を入れる
-           # strategy="C"または"E"のときのみ有効
-           pre.catch=NULL, # list(year=2012,wcatch=13000), 漁獲重量をgivenで与える場合
-           # list(year=2012:2017,E=rep(0.5,6)), 漁獲割合をgivenで与える場合
-           ##-------- 加入に関する設定 -----------------
-           rec.new=NULL, # 指定した年の加入量
-           # 年を指定しないで与える場合は、自動的にスタート年の加入になる。
-           # list(year=, rec=)で与える場合は、対応する年の加入を置き換える。
-           ##--- 加入関数
-           recfunc=HS.recAR, # 再生産関係の関数
-           rec.arg=list(upper.ssb=Inf,upper.recruit=Inf), # 加入の各種設定
-
-           ##--- Frecオプション；Frec計算のための設定リストを与えると、指定された設定でのFrecに対応するFで将来予測を行う
-           Frec=NULL,
-           # list(stochastic=TRUE, # TRUEの場合、stochastic simulationで50%の確率でBlimitを越す(PMS, TMI)
-           # FALSEの場合、RPS固定のprojectionがBilmitと一致する(NSK)
-           #      future.year=2018, # 何年の資源量を見るか？
-           #      Blimit=450*1000,  # Blimit (xトン)
-           #      scenario="catch.mean" or "blimit" (デフォルトはblimit; "catch.mean"とするとstochastic simulationにおける平均漁獲量がBlimitで指定した値と一致するようになる)
-           #      Frange=c(0.01,2*mult)) # Fの探索範囲
-           waa=NULL,waa.catch=NULL,maa=NULL,M=NULL, # 季節毎の生物パラメータ、または、生物パラメータを外から与える場合
-           waa.multi="opt", # waa.optyearに対応する年について、暦年漁獲量と一致するようにwaaを最適化するか？ "opt"の場合、内部で最適化。waa.optyearの長さ分のベクトルを与えて指定することもできる（ts>1のときのオプション）
-           waa.optyear=2011:2013, # waa.optyearをするときに、置き換えるwaaの年
-           replace.rec.year=2012, # 加入量を暦年の将来予測での加入量に置き換えるか？
-           F.sigma=0,
-           waa.fun=FALSE, #waaをnaaのfunctionとするか
-           naa0=NULL,eaa0=NULL,ssb0=NULL,faa0=NULL,
-           add.year=0, # 岡村オプションに対応。=1で1年分余計に計算する
-           det.run=TRUE # 1回めのランは決定論的将来予測をする（完璧には対応していない）
+future.vpa <- function(
+    res0,
+    currentF=NULL,
+    multi=1,
+    nyear=10,Pope=res0$input$Pope,
+    outtype="FULL",
+    multi.year=1,
+    start.year=NULL,
+    ABC.year=NULL,
+    waa.year=NULL,
+    maa.year=NULL,
+    M.year=NULL,
+    seed=NULL,
+    strategy="F",
+    HCR=NULL,
+    beta=NULL,delta=NULL,Blim=0,Bban=0,
+    plus.group=res0$input$plus.group,
+    N=1000,
+    silent=FALSE, is.plot=TRUE,
+    random.select=NULL,
+    pre.catch=NULL,
+    rec.new=NULL,
+    recfunc=HS.recAR,
+    rec.arg=list(upper.ssb=Inf,upper.recruit=Inf),
+    Frec=NULL,
+    waa=NULL,waa.catch=NULL,maa=NULL,M=NULL,
+    waa.multi="opt",
+    waa.optyear=2011:2013,
+    replace.rec.year=2012,
+    F.sigma=0,
+    waa.fun=FALSE,
+    naa0=NULL,eaa0=NULL,ssb0=NULL,faa0=NULL,
+    add.year=0,
+    det.run=TRUE
   ){
 
       argname <- ls()

@@ -7,6 +7,15 @@
 out.vpa(res = NULL, rres = NULL, fres = NULL, ABC = NULL,
   filename = "vpa")
 }
+\arguments{
+\item{res}{VPA result}
+
+\item{rres}{reference point}
+
+\item{fres}{future projection result (not nessesarily)}
+
+\item{filename}{filename without extension}
+}
 \description{
 結果の出力
 }

@@ -6,6 +6,9 @@
 \usage{
 plotBfish(tres0, vpares, b.target, ssb.max = Inf, biomass.scale = 1000)
 }
+\arguments{
+\item{res0}{SR.estの結果}
+}
 \description{
 資源量の上積みグラフを書く
 }

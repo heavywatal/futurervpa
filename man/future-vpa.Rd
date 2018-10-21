@@ -18,6 +18,70 @@ future.vpa(res0, currentF = NULL, multi = 1, nyear = 10,
   naa0 = NULL, eaa0 = NULL, ssb0 = NULL, faa0 = NULL,
   add.year = 0, det.run = TRUE)
 }
+\arguments{
+\item{currentF}{管理前のF}
+
+\item{multi}{管理後（ABC.yearから）のF (current F x multi)}
+
+\item{multi.year}{ある特定の年だけFを変えたい場合。デフォルトは1。変える場合は、指定した年またはタイムステップの要素数のベクトルで指定。}
+
+\item{start.year}{将来予測の開始年，NULLの場合はVPA計算の最終年の次の年}
+
+\item{ABC.year}{ABC yearを計算する年。NULLの場合はVPA計算の最終年の次の次の年}
+
+\item{waa.year}{VPA結果から生物パラメータをもってきて平均する期間}
+
+\item{maa.year}{VPA結果から生物パラメータをもってきて平均する期間}
+
+\item{M.year}{VPA結果から生物パラメータをもってきて平均する期間}
+
+\item{strategy}{F: 漁獲係数一定, E: 漁獲割合一定、C: 漁獲量一定（pre.catchで漁獲量を指定）}
+
+\item{HCR}{HCRを使う場合、list(Blim=154500, Bban=49400,beta=1)のように指定するか、以下の引数をセットする,}
+
+\item{N}{確率的なシミュレーションをする場合の繰り返し回数。
+N+1の結果が返され、1列目に決定論的な結果が
+0を与えると決定論的な結果のみを出力}
+
+\item{silent, is.plot}{計算条件を出力、プロットするか}
+
+\item{random.select}{選択率をランダムリサンプリングする場合、ランダムリサンプリングする年を入れる
+strategy="C"または"E"のときのみ有効}
+
+\item{pre.catch}{list(year=2012,wcatch=13000), 漁獲重量をgivenで与える場合
+list(year=2012:2017,E=rep(0.5,6)), 漁獲割合をgivenで与える場合}
+
+\item{rec.new}{指定した年の加入量
+年を指定しないで与える場合は、自動的にスタート年の加入になる。
+list(year=, rec=)で与える場合は、対応する年の加入を置き換える。}
+
+\item{recfunc}{再生産関係の関数}
+
+\item{rec.arg}{加入関数の各種設定}
+
+\item{Frec}{Frec計算のための設定リストを与えると、指定された設定でのFrecに対応するFで将来予測を行う
+list(stochastic=TRUE, # TRUEの場合、stochastic simulationで50%の確率でBlimitを越す(PMS, TMI)
+FALSEの場合、RPS固定のprojectionがBilmitと一致する(NSK)
+future.year=2018, # 何年の資源量を見るか？
+Blimit=450\emph{1000,  # Blimit (xトン)
+scenario="catch.mean" or "blimit" (デフォルトはblimit; "catch.mean"とするとstochastic simulationにおける平均漁獲量がBlimitで指定した値と一致するようになる)
+Frange=c(0.01,2}mult)) # Fの探索範囲}
+
+\item{waa, waa.catch, maa, M}{季節毎の生物パラメータ、または、生物パラメータを外から与える場合}
+
+\item{waa.multi}{waa.optyearに対応する年について、暦年漁獲量と一致するようにwaaを最適化するか？ "opt"の場合、内部で最適化。waa.optyearの長さ分のベクトルを与えて指定することもできる（ts>1のときのオプション）}
+
+\item{waa.optyear}{waa.optyearをするときに、置き換えるwaaの年}
+
+\item{replace.rec.year}{加入量を暦年の将来予測での加入量に置き換えるか？}
+
+\item{waa.fun}{waaをnaaのfunctionとするか}
+
+\item{add.year}{岡村オプションに対応。=1で1年分余計に計算する}
+
+\item{det.run}{1回めのランは決定論的将来予測をする（完璧には対応していない）}
+}
 \description{
 multiのオプションは管理後のFのmultiplier（管理前後でselectivityが同じ）
+年数がNULLの場合，VPAの最終年のパラメータを持ってくる。
 }

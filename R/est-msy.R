@@ -1,26 +1,41 @@
 #' Estimate MSY
 #'
+#' @param eyear 将来予測の最後のeyear+1年分を平衡状態とする
+#' @param FUN 漁獲量の何を最大化するか？
+#' @param N stochastic計算するときの繰り返し回数
+#' @param onlylower.pgy PGY計算するとき下限のみ計算する（計算時間省略のため）
+#' @param is.small 将来予測の結果を返さない。
+#' @param is.Kobe Kobeの計算をするかどうか。順番に、HS, BH, RIの順
+#' @param is.5perlower HSの折れ点を5\%の確率で下回るときの親魚資源量
+#' @param max.target method="optimize"以外を使うとき、どの指標を最大化するか。
+#'        他のオプションとしては"catch.median" (漁獲量のmedianの最大化)
+#' @param calc.yieldcurve yield curveを正確に計算するかどうか。
+#'        TRUEだと計算時間が余計にかかる。FALSEだと、yield curveは正確ではない
+#' @param trace.multi Fmsyを探索したり、Yield curveを書くときにグリッドサーチをするときのFの刻み。
+#'        Fcurrentに対する乗数。Fが異常に大きい場合、親魚=0になって加入＝NA
+#' @param PGY PGY管理基準値を計算するかどうか。
+#'        計算しない場合はNULLを、計算する場合はc(0.8,0.9,0.95)のように割合を入れる
+#' @param B0percent B0_XX\%の管理基準値を計算するかどうか
 #' @rdname est-msy
 #' @export
 est.MSY <- function(vpares,farg,
                    seed=1,n.imputation=1,
                    nyear=50,
-                   eyear=0, # 将来予測の最後のeyear+1年分を平衡状態とする
-#                   FUN=median, # 漁獲量の何を最大化するか？
-                   FUN=mean, # 漁獲量の何を最大化するか？
-                   N=1000, # stochastic計算するときの繰り返し回数
-                   onlylower.pgy=FALSE,# PGY計算するとき下限のみ計算する（計算時間省略のため）
-                   is.small=FALSE, # 将来予測の結果を返さない。
-                   is.Kobe=FALSE, # Kobeの計算をするかどうか。順番に、HS, BH, RIの順
-                   is.5perlower=FALSE, # HSの折れ点を5%の確率で下回るときの親魚資源量
+                   eyear=0,
+                   FUN=mean,
+                   N=1000,
+                   onlylower.pgy=FALSE,
+                   is.small=FALSE,
+                   is.Kobe=FALSE,
+                   is.5perlower=FALSE,
                    optim.method="optimize",
-                   max.target="catch.mean", # method="optimize"以外を使うとき、どの指標を最大化するか。他のオプションとしては"catch.median" (漁獲量のmedianの最大化)
-                   calc.yieldcurve=TRUE, # yield curveを正確に計算するかどうか。TRUEだと計算時間が余計にかかる。FALSEだと、yield curveは正確ではない
+                   max.target="catch.mean",
+                   calc.yieldcurve=TRUE,
                    Blimit=0,
-                   trace.multi=c(seq(from=0,to=0.9,by=0.1),1,seq(from=1.1,to=2,by=0.1),3:5,7,20,100), # Fmsyを探索したり、Yield curveを書くときにグリッドサーチをするときのFの刻み。Fcurrentに対する乗数。Fが異常に大きい場合、親魚=0になって加入＝NA
+                   trace.multi=c(seq(from=0,to=0.9,by=0.1),1,seq(from=1.1,to=2,by=0.1),3:5,7,20,100),
                    is.plot=TRUE,
-                   PGY=NULL, # PGY管理基準値を計算するかどうか。計算しない場合はNULLを、計算する場合はc(0.8,0.9,0.95)のように割合を入れる
-                   B0percent=NULL # B0_XX%の管理基準値を計算するかどうか
+                   PGY=NULL,
+                   B0percent=NULL
                    ){
 
 

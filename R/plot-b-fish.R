@@ -1,9 +1,10 @@
 #' 資源量の上積みグラフを書く
 #'
-#' @rdname plot-b-fish
+#' @param res0 SR.estの結果
 #' @importFrom png readPNG
+#' @rdname plot-b-fish
 #' @export
-plotBfish <- function(res0, # SR.estの結果
+plotBfish <- function(res0,
                       Bref,
                       unit.waa=1,ssb.max=Inf,
                       target="hs",biomass.scale=1000,pngfile="fish.png"){
