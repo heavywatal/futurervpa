@@ -649,7 +649,7 @@ future.vpa <-
       nage <- length(ages)
     }
 
-    if(!silent)  cat("F multiplier= ", multi,"seed=",seed,"¥n")
+    if(!silent)  cat("F multiplier= ", multi,"seed=",seed,"\n")
 
     # シードの設定
     if(is.null(seed)) arglist$seed <- as.numeric(Sys.time())
@@ -702,7 +702,7 @@ future.vpa <-
 
       res <- optimize(getFrec,interval=Frec$Frange,arglist=arglist)
       multi <- res$minimum
-      cat("F multiplier=",multi,"¥n")
+      cat("F multiplier=",multi,"\n")
     }
 
     #-------------- main function ---------------------
@@ -765,7 +765,7 @@ future.vpa <-
       WAA.res <- lapply(1:nage, function(i) {
         log.w <- as.numeric(log(WAA[i,]))
         log.n <- as.numeric(log(NAA[i,]))
-        lm(log.w‾log.n)
+        lm(log.w~log.n)
       })
       WAA.cv <- sapply(1:nage, function(i) sqrt(mean(WAA.res[[i]]$residuals^2)))
       WAA.b0 <- sapply(1:nage, function(i) as.numeric(WAA.res[[i]]$coef[1]))
@@ -827,7 +827,7 @@ future.vpa <-
             rps.mat[1,] <- naa[1,1,]/thisyear.ssb
         }
         else{
-          stop("ERROR Set appropriate year to start projection¥n")
+          stop("ERROR Set appropriate year to start projection\n")
         }
       }
       else{
@@ -1370,7 +1370,7 @@ getABC <- function(res.vpa, # VPAの結果
   rownames(res.ref$ABC)[6] <- paste("upperSSBcur at",target.year)
   rownames(res.ref$ABC)[8] <- paste("upperSSBlim at",target.year)
   fres0 <- fres
-  write.table(round(res.ref$ABC,2),sep="¥t")
+  write.table(round(res.ref$ABC,2),sep="\t")
   save(fres0,file="fres0.R") # 将来予測の全結果はfres0.Rにてセーブされている
 
   # Kobe chartの作成
@@ -1490,64 +1490,64 @@ out.vpa <- function(res=NULL, # VPA result
   if(!is.null(res)){
     write("# VPA results",file=csvname, append=T)
 
-    write("¥n# catch at age",file=csvname,append=T)
+    write("\n# catch at age",file=csvname,append=T)
     write.table2(res$input$dat$caa,title.tmp="Catch at age")
 
-    write("¥n# maturity at age",file=csvname,append=T)
+    write("\n# maturity at age",file=csvname,append=T)
     write.table2(res$input$dat$maa,title.tmp="Maturity at age")
 
-    write("¥n# weight at age for biomass calculation",file=csvname,append=T)
+    write("\n# weight at age for biomass calculation",file=csvname,append=T)
     write.table2(res$input$dat$waa,title.tmp="Weight at age (for biomass)")
 
     if(!is.null(res$input$dat$waa.catch)){
-    write("¥n# weight at age for catch calculation",file=csvname,append=T)
+    write("\n# weight at age for catch calculation",file=csvname,append=T)
     write.table2(res$input$dat$waa.catch,title.tmp="Weight at age (for catch)")
     }
 
 
-    write("¥n# M at age",file=csvname,append=T)
+    write("\n# M at age",file=csvname,append=T)
     write.table2(res$input$dat$M,title.tmp="M at age")
 
-    write("¥n# fishing mortality at age",file=csvname,append=T)
+    write("\n# fishing mortality at age",file=csvname,append=T)
     write.table2(res$faa,title.tmp="F at age")
 
-    write("¥n# Current F",file=csvname,append=T)
+    write("\n# Current F",file=csvname,append=T)
     write.table2(res$Fc.at.age,title.tmp="Current F")
 
-    write("¥n# numbers at age",file=csvname,append=T)
+    write("\n# numbers at age",file=csvname,append=T)
     write.table2(res$naa,title.tmp="Numbers at age")
 
-    write("¥n# total and spawning biomass ",file=csvname,append=T)
+    write("\n# total and spawning biomass ",file=csvname,append=T)
     x <- rbind(colSums(res$ssb),colSums(res$baa),colSums(res$wcaa))
     rownames(x) <- c("Spawning biomass","Total biomass","Catch biomass")
     write.table2(x,title.tmp="Total and spawning biomass")
   }
 
   if(!is.null(rres)){
-    write("¥n# Reference points",file=csvname,append=T)
+    write("\n# Reference points",file=csvname,append=T)
     write.table2(rres$summary,title.tmp="Future F at age",is.plot=F)
   }
 
   if(!is.null(fres)){
-    write("¥n# future projection results",file=csvname,append=T)
-    write("¥n# future F at age",file=csvname,append=T)
+    write("\n# future projection results",file=csvname,append=T)
+    write("\n# future F at age",file=csvname,append=T)
     write.table2(fres$faa[,,1],title.tmp="Future F at age")
 
-    write("¥n# future numbers at age",file=csvname,append=T)
+    write("\n# future numbers at age",file=csvname,append=T)
     write.table2(fres$naa[,,1],title.tmp="Future numbers at age")
 
-    write("¥n# future total and spawning biomass",file=csvname,append=T)
+    write("\n# future total and spawning biomass",file=csvname,append=T)
     x <- rbind(fres$vssb[,1],fres$vbiom[,1],fres$vwcaa[,1])
     rownames(x) <- c("Spawning biomass","Total biomass","Catch biomass")
     write.table2(x,title.tmp="Future total, spawning and catch biomass")
   }
 
   if(!is.null(ABC)){
-    write("¥n# ABC summary",file=csvname,append=T)
+    write("\n# ABC summary",file=csvname,append=T)
     write.table2(ABC$ABC,title.tmp="Future F at age",is.plot=F)
-    write("¥n# Kobe matrix",file=csvname,append=T)
+    write("\n# Kobe matrix",file=csvname,append=T)
     for(i in 1:dim(ABC$kobe.matrix)[[3]]){
-        write(paste("¥n# ",dimnames(ABC$kobe.matrix)[[3]][i]),
+        write(paste("\n# ",dimnames(ABC$kobe.matrix)[[3]][i]),
               file=csvname,append=T)
         write.table2(ABC$kobe.matrix[,,i],
                      title.tmp=dimnames(ABC$kobe.matrix)[[3]][i],is.plot=T)
@@ -1690,14 +1690,14 @@ solv.Feq <- function(cvec,nvec,mvec){
       while(abs(F0-F1)>0.0001 ){
         F0 <- F1
         F1 <- cvec[i]*(F0+mvec[i])/nvec[i]/(1-exp(-F0-mvec[i]))
-        if(F0-F1==-Inf) cat("¥n",cvec[i]," ",nvec[i]," ¥n")
+        if(F0-F1==-Inf) cat("\n",cvec[i]," ",nvec[i]," \n")
       }
       Fres[i] <- F1
     }
     else{
       Fres[i] <- 10
       cat("Warning: catch exceeded tot_num at: ",i," ",
-          round(cvec[i],6)," ",round(nvec[i],6),"¥n")
+          round(cvec[i],6)," ",round(nvec[i],6),"\n")
       }
   }
   Fres
@@ -1903,7 +1903,7 @@ SR.est <- function(vpares,SSB.dat=NULL,R.dat=NULL,gamma1=0.0001,er.log=TRUE,
 
     # HSを推定するための関数
     get.HS <- function(R,SSB,er.log,gamma1,do.profile=TRUE){
-        reg0 <- lm(R‾SSB-1)
+        reg0 <- lm(R~SSB-1)
         a0 <- reg0$coef
         b0 <- 0.9
         # hockey-stick
@@ -1958,7 +1958,7 @@ SR.est <- function(vpares,SSB.dat=NULL,R.dat=NULL,gamma1=0.0001,er.log=TRUE,
 
     # Beverton-Holt
     get.BH <- function(R,SSB,er.log){
-        reg0 <- lm(R‾SSB-1)
+        reg0 <- lm(R~SSB-1)
         a0 <- reg0$coef
         b0 <- max(SSB)
         res.BH <-  optim(c(log(a0),log(1/b0)),BH,R=R,SSB=SSB,method="BFGS",er.log=er.log)
@@ -1977,7 +1977,7 @@ SR.est <- function(vpares,SSB.dat=NULL,R.dat=NULL,gamma1=0.0001,er.log=TRUE,
 
 
     get.RI <- function(R,SSB,er.log){
-        reg0 <- lm(R‾SSB-1)
+        reg0 <- lm(R~SSB-1)
         a0 <- reg0$coef
         b0 <- max(SSB)
         # Ricker
@@ -2053,7 +2053,7 @@ SR.est <- function(vpares,SSB.dat=NULL,R.dat=NULL,gamma1=0.0001,er.log=TRUE,
 
     if(0){
         # 直線回帰
-        reg0 <- lm(R‾SSB-1)
+        reg0 <- lm(R~SSB-1)
         a0 <- reg0$coef
         res.SL <-  optimize(SL,c(0,log(a0)*10),R=R,SSB=SSB,er.log=er.log)
         res.SL <-  optim(c(res.SL$minimum,log(sqrt(res.SL$objective/length(R)))),
@@ -2673,7 +2673,7 @@ future.vpa2 <- function(res0,
     nage <- length(ages)
   }
 
-  if(!silent)  cat("F multiplier= ", multi,"seed=",seed,"¥n")
+  if(!silent)  cat("F multiplier= ", multi,"seed=",seed,"\n")
   #------------Frecオプションの場合 -------------
   if(!is.null(Frec)){
     if(is.null(Frec$stochastic)) Frec$stochastice <- TRUE
@@ -2715,7 +2715,7 @@ future.vpa2 <- function(res0,
         fx <- getFrec(x,arglist)
         if(fx>0) x.high <- x
         if(fx<0) x.low <- x
-        cat("fx =",fx,"¥n")
+        cat("fx =",fx,"\n")
         s <- s+1
       }
       multi <- x
@@ -2827,12 +2827,12 @@ future.vpa2 <- function(res0,
         arglist.tmp$waa.multi <- x
           #        browser()
         arglist.tmp$rec.new <- list(year=replace.rec.year,rec=a$naa[1,a$year==replace.rec.year,1])
-#        cat(arglist.tmp$rec.new$rec,"¥n")
+#        cat(arglist.tmp$rec.new$rec,"\n")
         a.tmp <- do.call(future.vpa,arglist.tmp)
         pre.catch <- tapply(a.tmp$vwcaa[,1],a.tmp$fyear.year,sum)
 
         xx <- sum((pre.catch[names(pre.catch)%in%waa.optyear]-opt.catch)^2)
-#        cat(xx,"¥n")
+#        cat(xx,"\n")
         return(xx)
       }
 #      browser()
@@ -2841,7 +2841,7 @@ future.vpa2 <- function(res0,
       est <- optim(rep(1,length(waa.optyear)),optfunc,
                    arglist=arglist,a=a,waa.optyear=waa.optyear,replace.rec.year=replace.rec.year)
       waa.multi <- est$par
-      cat(waa.multi,"¥n")
+      cat(waa.multi,"\n")
       rec.new <- list(year=replace.rec.year,rec=a$naa[1,a$year==replace.rec.year,1])
     }
     for(kk in 1:length(waa.optyear)){
@@ -2900,7 +2900,7 @@ future.vpa2 <- function(res0,
         }
       }
       else{
-        stop("ERROR Set appropriate year to start projection¥n")
+        stop("ERROR Set appropriate year to start projection\n")
       }
     }
     else{
@@ -3277,7 +3277,7 @@ allplot <- function(res0,target="hs",biomass.scale=1000,
              y <- fit.tmp$resid[[1]],
              ylim=c(-1.5,1.5),type="p",pch=20,xlab="Year",ylab="log(Obs)-log(Pred)")
         abline(h=0,lty=2)
-        xx <- loess(y‾x)
+        xx <- loess(y~x)
         points(x,xx$fitted,type="l",col=2,lwd=2)
         title("Residual to HS prediction")
 
@@ -3874,7 +3874,7 @@ est.MSY <- function(vpares,farg,
     if(is.na(range.tmp[2])) range.tmp[2] <- max(trace$table$fmulti)*10
 
     farg.tmp$multi <- 1
-    cat("Estimating MSY¥n")
+    cat("Estimating MSY\n")
     if(optim.method=="optimize"){
         tmp <- optimize(tmpfunc,range.tmp,f.arg=farg.tmp,eyear=eyear,FUN=FUN)
         # 壁にあたっている限り続ける
@@ -3887,7 +3887,7 @@ est.MSY <- function(vpares,farg,
         }
         farg.msy <- farg.tmp
         farg.msy$multi <- tmp$minimum # Fc.at.a * multiがFmsy
-        cat("F multiplier=",tmp$minimum,"¥n")
+        cat("F multiplier=",tmp$minimum,"\n")
         fout.msy <- do.call(future.vpa,farg.msy)
         if(calc.yieldcurve){
             trace$table <- rbind(trace$table,trace.func(farg.msy,eyear,hsp=Blimit,trace.N=trace.N,
@@ -3901,7 +3901,7 @@ est.MSY <- function(vpares,farg,
         trace.tmp <- trace.func(farg.tmp,eyear,hsp=Blimit,fmulti=Fmulti,trace.N=trace.N)
         farg.msy <- farg.tmp
         farg.msy$multi <- trace.tmp$table$fmulti[which.max(unlist(trace.tmp$table[max.target]))]
-        cat("F multiplier=",farg.msy$multi,"¥n")
+        cat("F multiplier=",farg.msy$multi,"\n")
         fout.msy <- do.call(future.vpa,farg.msy)
         trace$table <- rbind(trace$table,trace.tmp$table)
         trace$table <- trace$table[order(trace$table$fmulti),]
@@ -3910,10 +3910,10 @@ est.MSY <- function(vpares,farg,
     MSY <- get.stat(fout.msy,eyear=eyear)
     MSY <- cbind(MSY,get.stat2(fout.msy,eyear=eyear))
     rownames(MSY) <- "MSY"
-#    cat(" SSB=",MSY$"ssb.mean","¥n")
+#    cat(" SSB=",MSY$"ssb.mean","\n")
 
     if(is.Kobe){
-        cat("Estimating Kobe plot¥n")
+        cat("Estimating Kobe plot\n")
         Fhist <- get.Fhist(farg.org,vpares,eyear=eyear,trace=trace$table)
     }
     if(is.5perlower){
@@ -3940,7 +3940,7 @@ est.MSY <- function(vpares,farg,
     if(!is.null(PGY)){
         s <- 1
         for(j in 1:length(PGY)){
-            cat("Estimating PGY ",PGY[j]*100,"%¥n")
+            cat("Estimating PGY ",PGY[j]*100,"%\n")
             ttmp <- trace$table$catch.mean-PGY[j]*MSY$catch.mean
             ttmp <- which(diff(sign(ttmp))!=0)
             frange.list <- list(trace$table$fmulti[ttmp[1]+0:1],
@@ -3971,7 +3971,7 @@ est.MSY <- function(vpares,farg,
     fout.list3 <- list()
     if(!is.null(B0percent)){
         for(j in 1:length(B0percent)){
-            cat("Estimating B0 ",B0percent[j]*100,"%¥n")
+            cat("Estimating B0 ",B0percent[j]*100,"%\n")
             ttmp <- trace$table$ssb.mean-B0percent[j]*B0$ssb.mean
             ttmp <- which(diff(sign(ttmp))!=0)
             frange.list <- trace$table$fmulti[ttmp[1]+0:1]
@@ -4144,7 +4144,7 @@ plot.RP <- function(rdata,RP=NULL,biomass.scale=1,ymax=1,is.text=TRUE){
         abline(v=rdata[j]/biomass.scale,lty=1,lwd=2,col=rgb(40/255,96/255,40/255,0.5))
         if(isTRUE(is.text)){
             text(rdata[j]/biomass.scale,ymax[j],
-             paste(RP[j],"=¥n",format(round(rdata[j]/biomass.scale),big.mark=","),"",sep=""),adj=0)
+             paste(RP[j],"=\n",format(round(rdata[j]/biomass.scale),big.mark=","),"",sep=""),adj=0)
         }
     }
 }
@@ -4616,7 +4616,7 @@ plot.waa <- function(vres){
     for(i in 1:length(u.age)){
         tmp <- ages==u.age[i] & logy>-Inf & logx>-Inf
         if(sum(tmp,na.rm=TRUE)>0){
-            lm.list[[i]] <- lm(logy[tmp]‾logx[tmp])
+            lm.list[[i]] <- lm(logy[tmp]~logx[tmp])
             l.type <- ifelse(summary(lm.list[[i]])$coeff[2,4]<0.05,1,2)
             if(!is.na(l.type)) abline(lm.list[[i]],col=col.tmp[1+ages[i]],lty=l.type)
         }
@@ -5099,11 +5099,11 @@ est.MSY2 <- function(vpares,N=1000,res1=NULL,sim0=NULL,nyear=NULL,pgy=0.9,lim=0.
         farg$naa0 <- det.naa0
         if(!is.null(farg$pre.catch)){
             farg$pre.catch <- NULL # pre.catchオプションがあるとうまくいかないのでなかったことにする
-            cat("notice: option ¥"pre.catch¥" is turned off in estimating MSY.¥n")
+            cat("notice: option \"pre.catch\" is turned off in estimating MSY.\n")
         }
         if(!is.null(farg$new.rec)){
             farg$rec.new <- NULL # rec.newプションがあるとうまくいかないのでなかったことにする
-            cat("notice: option ¥"rec.new¥" is turned off in estimating MSY.¥n")
+            cat("notice: option \"rec.new\" is turned off in estimating MSY.\n")
         }
         farg$add.year <- 1
         farg$is.plot <- FALSE
@@ -5476,8 +5476,8 @@ est.MSY2 <- function(vpares,N=1000,res1=NULL,sim0=NULL,nyear=NULL,pgy=0.9,lim=0.
 
     b.table <- unlist(out[c("Bmsy","Btar","Fmsy","Bpgy.low","Blow","Flow",
                              "Blim1","Blim","Flim","Bban1","Bban","Fban")])
-#    names(b.table) <- c("Bmsy¥n(Equiribrium)","Bmsy¥n(with AR)=Btarget","Fmsy",
-#                         "Bpgy90%-low¥n(Equiribrium)","Bpgy90%-low¥n(with AR)=Blow","Flow")
+#    names(b.table) <- c("Bmsy\n(Equiribrium)","Bmsy\n(with AR)=Btarget","Fmsy",
+#                         "Bpgy90%-low\n(Equiribrium)","Bpgy90%-low\n(with AR)=Blow","Flow")
 #    b.limit <- c(out$Blim0,out$Blim,out$Flim,out$Bban0,out$Bban,out$Fban)
     b.table <- t(matrix(b.table,3,4))
 #    b.table[,1:2] <- b.table[,1:2]/1000
@@ -5678,7 +5678,7 @@ calc.beta <- function(res,mY=5,prob.beta=c(0.5,0.9),prob.delta=c(0.9,0.95),beta=
 #   }
 #  }
 
-  cat("beta=",round(beta,2),"¥n")
+  cat("beta=",round(beta,2),"\n")
 
   out <- list(stockid=stockid, Bref=Bref, beta=beta, delta=delta, w.recent=w.recent,P0=c(Prob01, Prob02), P.beta=c(Prob.b1, Prob.b2), P.delta=c(Prob.d1,Prob.d2), Fmsy=Fmsy, B.cur=B.cur, ssb.tmp=ssb.tmp,Ccur=Ccur, Level=c(B.cur/Btar,B.cur/Blim), Blim.ratio=(Blim/10^6)/Blim.cur, future.B=future.B, future.C=future.C, Fabc=Fabc, abc=ABC, abc.ratio=ABC/Ccur)
 
