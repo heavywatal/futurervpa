@@ -1,8 +1,7 @@
 # 単位はcatch at ageの尾数が100万尾、waaがgの場合、重量の単位がちょうどトンになるようになっている。
-
+#' @importFrom png readPNG
 allplot <- function(res0,target="hs",biomass.scale=1000,
                     pngfile="../buri.png",detail.plot=1:3){
-    require("ping")
     dmodel <- res0$vpares
     summary <- res0$summary[rownames(res0$summary)==target,]
     res00 <- res0[names(res0)==target][[1]]
@@ -192,11 +191,9 @@ allplot <- function(res0,target="hs",biomass.scale=1000,
         tmp <- substr(colnames(tres0),1,5)=="TC-MA"
         tc <- tres0[,tmp]/biomass.scale
         tc2 <- sapply(1:ncol(tc),function(x) apply(tc[,1:x,drop=F],1,sum,na.rm=T))
-        library(png)
         if(file.exists(pngfile)) image <- readPNG(pngfile)
         else image <- NULL
 
-#        library(RColorBrewer)
 #        if(ncol(tc)<10)    col.tmp <- brewer.pal(ncol(tc),"Greens")
 #        else col.tmp <- c(brewer.pal(9,"Greens"),rev(brewer.pal(ifelse(ncol(tc)-9<3,3,ncol(tc)-9),"GnBu")))
         col.tmp1 <- rgb(40/255,96/255,163/255,seq(from=0.1,to=0.9,length=ncol(tc)))

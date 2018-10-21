@@ -1,4 +1,5 @@
 #### 資源量の上積みグラフを書く
+#' @importFrom png readPNG
 plotBfish <- function(res0, # SR.estの結果
                       Bref,
                       unit.waa=1,ssb.max=Inf,
@@ -17,7 +18,6 @@ plotBfish <- function(res0, # SR.estの結果
     tmp <- substr(colnames(tres0),1,5)=="TC-MA"
     tc <- tres0[,tmp]/biomass.scale * unit.waa
     tc2 <- sapply(1:ncol(tc),function(x) apply(tc[,1:x,drop=F],1,sum,na.rm=T))
-    library(png)
     if(file.exists(pngfile)) image <- readPNG(pngfile)
     else image <- NULL
 
@@ -155,7 +155,6 @@ plotBfish <- function(tres0,vpares, # SR.estの結果
     tmp <- substr(colnames(tres0),1,5)=="TC-MA"
     tc <- tres0[,tmp]/biomass.scale
     tc2 <- sapply(1:ncol(tc),function(x) apply(tc[,1:x,drop=F],1,sum,na.rm=T))
-#    library(png)
 #    {if(file.exists(pngfile)) image <- readPNG(pngfile)
 #    else image <- NULL}
 

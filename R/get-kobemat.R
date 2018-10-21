@@ -52,6 +52,8 @@ get.kobemat2 <- function(fout,N=fout$input$N,nyear=fout$input$nyear,Btarget=0,
 
 ## ちょっと複雑なkobe.plot
 # foutsが複数の将来予測の結果。brefsは複数の管理基準値
+#' @importFrom foreach foreach %do%
+#' @importFrom RColorBrewer brewer.pal
 get.kobemat2 <- function(fouts,brefs,xlim=NULL,target.prob=0.5){
 #    brefs <- sort(brefs)
     years <- as.numeric(rownames(fouts[[1]]$vssb))
@@ -68,7 +70,6 @@ get.kobemat2 <- function(fouts,brefs,xlim=NULL,target.prob=0.5){
     abline(h=1:ncol(brefs),v=years,col="gray")
     axis(side=2,at=1:nrow(brefs),label=rownames(brefs))
 
-    require(RColorBrewer)
     cols <- brewer.pal(ncol(brefs), "Paired")
 
     for(i in 1:length(fouts)){

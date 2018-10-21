@@ -1,4 +1,5 @@
-
+#' @importFrom plotrix radial.plot
+#' @importFrom RColorBrewer brewer.pal
 plotRadial <- function(index,base=1,col.tmp=NULL,lwd=2,...){
     old.par <- par()
     layout(matrix(c(1,2),2,1),heights=c(2,1))

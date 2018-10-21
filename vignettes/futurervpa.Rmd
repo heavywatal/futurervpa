@@ -200,8 +200,6 @@ total.index[index.name] # パフォーマンス指標の出力
 ## プロット
 
 ```{r plot, eval=FALSE}
-library(RColorBrewer)
-library(plotrix)
 plotRadial(total.index[index.name],
            base=1) # どの管理基準値をベースにするか。行の番号
 
