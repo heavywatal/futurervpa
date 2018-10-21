@@ -1,10 +1,12 @@
-####################
-### 西嶋加筆 # 2018/06/07
-
-## 加入の残差の自己相関を考慮した再生産関係の推定
-## L1ノルム（最小絶対値）も推定できる (sigmaはSD)
-## TMB = TRUEでmarginal likelihood (.cppファイルが必要)
-
+#' Fit SR
+#'
+#' @description
+#' 西嶋加筆 # 2018/06/07
+#' 加入の残差の自己相関を考慮した再生産関係の推定
+#' L1ノルム（最小絶対値）も推定できる (sigmaはSD)
+#' TMB = TRUEでmarginal likelihood (.cppファイルが必要)
+#' @rdname fit-sr
+#' @export
 fit.SR <- function(SRdata,SR="HS",method="L2",AR=1,TMB=FALSE,hessian=FALSE,w=rep(1,length(SRdata$year)),length=20){
 
   argname <- ls()

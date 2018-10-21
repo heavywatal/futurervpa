@@ -1,4 +1,7 @@
-
+#' SR data
+#'
+#' @rdname sr-data
+#' @export
 get.SRdata <- function(vpares,R.dat=NULL,SSB.dat=NULL,years=as.numeric(colnames(vpares$naa))){
     # R.datとSSB.datだけが与えられた場合、それを使ってシンプルにフィットする
     if(!is.null(R.dat) & !is.null(SSB.dat)){
@@ -27,6 +30,8 @@ get.SRdata <- function(vpares,R.dat=NULL,SSB.dat=NULL,years=as.numeric(colnames(
     return(dat[c("year","SSB","R")])
 }
 
+#' @rdname sr-data
+#' @export
 plot.SRdata <- function(SRdata){
     plot(SRdata$SSB,SRdata$R,xlab="SSB",ylab="R",xlim=c(0,max(SRdata$SSB)),ylim=c(0,max(SRdata$R)))
 }

@@ -1,5 +1,10 @@
-# 単位はcatch at ageの尾数が100万尾、waaがgの場合、重量の単位がちょうどトンになるようになっている。
+#' Plot all
+#'
+#' @description
+#' 単位はcatch at ageの尾数が100万尾、waaがgの場合、重量の単位がちょうどトンになるようになっている。
+#' @rdname allplot
 #' @importFrom png readPNG
+#' @export
 allplot <- function(res0,target="hs",biomass.scale=1000,
                     pngfile="../buri.png",detail.plot=1:3){
     dmodel <- res0$vpares

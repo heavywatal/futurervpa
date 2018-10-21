@@ -1,6 +1,9 @@
-##----------------------- 将来予測関数 ----------------------------
-## multiのオプションは管理後のFのmultiplier（管理前後でselectivityが同じ）
-
+#' 将来予測関数
+#'
+#' @description
+#' multiのオプションは管理後のFのmultiplier（管理前後でselectivityが同じ）
+#' @rdname future-vpa
+#' @export
 future.vpa <-
   function(res0,
            currentF=NULL, # 管理前のF

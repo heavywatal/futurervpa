@@ -1,5 +1,8 @@
-#### 資源量の上積みグラフを書く
+#' 資源量の上積みグラフを書く
+#'
+#' @rdname plot-b-fish
 #' @importFrom png readPNG
+#' @export
 plotBfish <- function(res0, # SR.estの結果
                       Bref,
                       unit.waa=1,ssb.max=Inf,

@@ -1,4 +1,7 @@
-
+#' Get perform
+#'
+#' @rdname get-perform
+#' @export
 get.perform <- function(fout0,Blimit=0,longyear=50,smallcatch=0.5,N=NULL,
                         shortyear=c(3,5,10),tmp.year=NULL){
     stat1 <- get.stat(fout0,eyear=0,hsp=Blimit,tmp.year=tmp.year)[c("catch.mean","catch.CV","biom.mean","biom.CV","ssb.mean","lower.HSpoint")]

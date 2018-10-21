@@ -1,4 +1,7 @@
-
+#' Estimate MSY
+#'
+#' @rdname est-msy
+#' @export
 est.MSY <- function(vpares,farg,
                    seed=1,n.imputation=1,
                    nyear=50,

@@ -1,6 +1,7 @@
-### 結果の入出力
-## 結果の出力
-
+#' 結果の出力
+#'
+#' @rdname out-vpa
+#' @export
 out.vpa <- function(res=NULL, # VPA result
                     rres=NULL, # reference point
                     fres=NULL, # future projection result (not nessesarily)

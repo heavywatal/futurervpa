@@ -1,4 +1,7 @@
-
+#' Generation Time
+#'
+#' @rdname generation-time
+#' @export
 Generation.Time <- function(vpares,
   maa.year=2014:2015,
   M.year=2014:2015,

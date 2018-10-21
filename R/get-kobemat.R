@@ -1,6 +1,9 @@
-## kobe.matrixの計算
-# Pr(B<Btarget)のみを返す単純なやつ
-
+#' kobe.matrixの計算
+#'
+#' @description
+#' Pr(B<Btarget)のみを返す単純なやつ
+#' @rdname get-kobemat
+#' @export
 get.kobemat <- function(fout,N=fout$input$N,nyear=fout$input$nyear,Btarget=0,
                       fmulti=seq(from=0.3,to=1,by=0.1)){
     multi.org <- 1

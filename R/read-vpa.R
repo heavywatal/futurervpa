@@ -1,5 +1,7 @@
-###
-
+#' 結果の入力
+#'
+#' @rdname read-vpa
+#' @export
 read.vpa <- function(tfile,
                      caa.label="catch at age",
                      maa.label="maturity at age",
