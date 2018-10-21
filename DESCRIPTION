@@ -21,3 +21,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/heavywatal/futurervpa
+BugReports: https://github.com/heavywatal/futurervpa/issues

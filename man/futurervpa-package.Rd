@@ -8,6 +8,14 @@
 \description{
 What the package does (one paragraph).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/heavywatal/futurervpa}
+  \item Report bugs at \url{https://github.com/heavywatal/futurervpa/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Watal M. Iwasaki \email{heavy.watal@gmail.com}
 
